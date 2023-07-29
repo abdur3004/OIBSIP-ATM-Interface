@@ -1,0 +1,251 @@
+import java.util.Scanner;
+class BankAcct
+{
+	String name;
+	String username;
+	String password;
+	String accountNo;
+	float balance = 1000000f;
+	int transactions = 0;
+	String historyOfTransactions = "";
+	public void registeration() 
+	{
+		Scanner sc = new Scanner(System.in);
+		System.out.print("\nYour Name : ");
+		this.name = sc.nextLine();
+		System.out.print("\nYour Username : ");
+		this.username = sc.nextLine();
+		System.out.print("\nYour Password : ");
+		this.password = sc.nextLine();
+		System.out.print("\nYour Account Number :  ");
+		this.accountNo = sc.nextLine();
+		System.out.println("\nRegistration Successful");
+		System.out.println("Please Login");
+	}
+	public boolean loginProcess() 
+	{
+		boolean isLogin = false;
+		Scanner sc = new Scanner(System.in);
+		while ( !isLogin ) 
+		{
+			System.out.print("\nEnter Your Username : ");
+			String Username = sc.nextLine();
+			if ( Username.equals(username) ) 
+			{
+				while ( !isLogin ) 
+				{
+					System.out.print("\nEnter Your Password : ");
+					String Password = sc.nextLine();
+					if ( Password.equals(password) ) 
+					{
+						System.out.println("\nLogin Successful");
+						isLogin = true;
+					}
+					else 
+					{
+						System.out.println("\nRetry Your Password Please");
+					}
+				}
+			}
+			else 
+			{
+				System.out.println("\nUsername Missing");
+			}
+		}
+		return isLogin;
+	}
+	public void withdrawProcess() 
+	{
+		System.out.print("\nAmount To Withdraw :  ");
+		Scanner sc = new Scanner(System.in);
+		float amount = sc.nextFloat();
+		try 
+		{
+			if ( balance >= amount ) 
+			{
+				transactions++;
+				balance -= amount;
+				System.out.println("\nThanks! Your Withdrawal Was Successful");
+				String str = amount + " Rs. Withdrawn\n";
+				historyOfTransactions = historyOfTransactions.concat(str);
+				
+			}
+			else 
+			{
+				System.out.println("\nSorry! You Have An Insufficient Balance");
+			}
+			
+		}
+		catch ( Exception e) 
+		{
+		}
+	}
+	public void depositProcess() 
+	{	
+		System.out.print("\nAmount to deposit : ");
+		Scanner sc = new Scanner(System.in);
+		float amount = sc.nextFloat();	
+		try 
+		{
+			if ( amount <= 1000000f ) 
+			{
+				transactions++;
+				balance += amount;
+				System.out.println("\nThanks! Your Deposit Was Successful");
+				String str = amount + " Rs. deposited\n";
+				historyOfTransactions = historyOfTransactions.concat(str);
+			}
+			else 
+			{
+				System.out.println("\nSorry! The Max Limit Is Rs.1000000.00/-");
+			}	
+		}
+		catch ( Exception e) 
+		{
+		}
+	}
+	public void transferProcess() 
+	{
+		
+		Scanner sc = new Scanner(System.in);
+		System.out.print("\n Recipient's Name : ");
+		String recipient = sc.nextLine();
+		System.out.print("\nAmount to transfer : ");
+		float amount = sc.nextFloat();
+		try 
+		{
+			if ( balance >= amount ) 
+			{
+				if ( amount <= 50000f ) 
+				{
+					transactions++;
+					balance -= amount;
+					System.out.println("\nThe Transfer Has Been Successful To " + recipient);
+					String str = amount + " Rs. Transferred To " + recipient + "\n";
+					historyOfTransactions = historyOfTransactions.concat(str);
+				}
+				else 
+				{
+					System.out.println("\nSorry! The Max Limit is Rs.50000.00/-");
+				}
+			}
+			else 
+			{
+				System.out.println("\nSorry! You Have An Insufficient Balance");
+			}
+		}
+		catch ( Exception e) 
+		{
+		}
+	}
+	public void balanceCheck() 
+	{
+		System.out.println("\n" + balance + " Rs.");
+	}
+	public void historyOfTransactions() 
+	{
+		if ( transactions == 0 ) 
+		{
+			System.out.println("\nThere Were No Transactions Made Till Now");
+		}
+		else 
+		{
+			System.out.println("\n" + historyOfTransactions);
+		}
+	}
+}
+class InterfaceATM
+{
+	public static int intInp(int limit) 
+	{
+		int inp = 0;
+		boolean flag = false;
+		while ( !flag ) 
+		{
+			try 
+			{
+				Scanner sc = new Scanner(System.in);
+				inp = sc.nextInt();
+				flag = true;
+				
+				if ( flag && inp > limit || inp < 1 ) 
+				{
+					System.out.println("Select Num Between 1 To " + limit);
+					flag = false;
+				}
+			}
+			catch ( Exception e ) 
+			{
+				System.out.println("Careful! Only Integer Values Are To Be Entered");
+				flag = false;
+			}
+		};
+		return inp;
+	}
+	public static void main(String[] args) 
+	{
+		System.out.println("\n<><><><><><><><><><><><><><><><><><><><><><><>\n");
+		System.out.println("\n WELCOME TO ABDUR'S ATM \n");
+		System.out.println("\n<><><><><><><><><><><><><><><><><><><><><><><>\n");
+		System.out.println("Select Any One Of The Below Options");
+		System.out.println("1.Registeration");
+		System.out.println("2.Exit");
+		System.out.print("What Would You Like To Do? ");
+		int selection = intInp(2);
+		if ( selection == 1 ) 
+		{
+			BankAcct b = new BankAcct();
+			b.registeration();
+			while(true) 
+			{
+				System.out.println("1.Login");
+				System.out.println("2.Exit");
+				System.out.print("What Would You Like To Do? ");
+				int ch = intInp(2);
+				if ( ch == 1 ) 
+				{
+					if (b.loginProcess()) 
+					{
+						System.out.println("\n\n---------- WELCOME BACK TO ABDUR'S ATM " + b.name + " - ----------\n");
+						boolean isFinished = false;
+						while (!isFinished) 
+						{
+							System.out.println("\n1.Withdraw Rs. \n2.Deposit Rs. \n3.Transfer Rs. \n4.Check Balance Rs. \n5.Transaction History Rs. \n6.Exit");
+							System.out.print("\nWhat Would You Like To Do?");
+							int c = intInp(6);
+							switch(c) 
+							{
+								case 1:
+								b.withdrawProcess();
+								break;
+								case 2:
+								b.depositProcess();
+								break;
+								case 3:
+								b.transferProcess();
+								break;
+								case 4:
+								b.balanceCheck();
+								break;
+								case 5:
+								b.historyOfTransactions();
+								break;
+								case 6:
+								isFinished = true;
+								break;
+							}
+						}
+					}
+				}
+				else 
+				{
+					System.exit(0);
+				}
+			}
+		}
+		else 
+		{
+			System.exit(0);
+		}
+	}
+}
